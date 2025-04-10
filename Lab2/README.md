@@ -1,36 +1,29 @@
 # Запуск
 1. В зависимости от эксперимента нужно выполнить одну из команд:
    
-- ``docker-compose -f docker-compose.yml up``
-- ``docker-compose -f docker-compose-3d.yml up``
+- ``docker-compose -f docker-compose.yml up -d``
+- ``docker-compose -f docker-compose-3d.yml up -d``
   
-2. Перенести данные в контейнер namenode и перенести файлы с кодом в контейнер spark-master
+2. В зависимости от эксперимента запустить одну из команд:
    
-``docker cp data/100000_Sales_Records.csv namenode:/``
+Если в пункте (1) создана 1 нода, то обычная / оптимизированная версия запускаются так:
 
-``docker cp -L src/. spark-master:/opt/bitnami/spark/``
-
-
-3. Зайти в контейнер namenode и положить данные в hdfs
-   
-``docker exec -it namenode bash``
-
-``hdfs dfs -put 100000_Sales_Records.csv /``
-
-``exit``
-
-4. В зависимости от эксперимента запустить одну из команд:
-   
-Если нода 1, то обычная / оптимизированная версия запускаются так:
-
-- ``docker exec -it spark-master spark-submit --master spark://spark-master:7077 main.py -d hdfs://namenode:9000/100000_Sales_Records.csv -n 1 -i 15``
-- ``docker exec -it spark-master spark-submit --master spark://spark-master:7077 main.py -d hdfs://namenode:9000/100000_Sales_Records.csv -n 1 -i 15 -o``
+- ``bash run.sh -n 1 -i 15``
+- ``bash run.sh -n 1 -i 15 -o``
   
-Если нод 3, то обычная / оптимизированная версия запускаются так:
+Если в пункте (1) создано 3 ноды, то обычная / оптимизированная версия запускаются так:
 
-- ``docker exec -it spark-master spark-submit --master spark://spark-master:7077 main.py -d hdfs://namenode:9000/100000_Sales_Records.csv -n 3 -i 15``
-- ``docker exec -it spark-master spark-submit --master spark://spark-master:7077 main.py -d hdfs://namenode:9000/100000_Sales_Records.csv -n 3 -i 15 -o``
-5. Сгенерировать график с результатами можно так:
+- ``bash run.sh -n 3 -i 15``
+- ``bash run.sh -n 3 -i 15 -o``
+
+  Параметры обозначают следующее:
+  
+  `-n`: количество нод (нужно для верного названия файла с результатом) <br>
+  `-i`: количество запусков для усреднения результатов <br>
+  `-o`: оптимизированная версия <br>
+  
+
+3. Сгенерировать график с результатами можно так:
   
 ``python src/plots.py``
 ![result_distributions](https://github.com/user-attachments/assets/85f67b17-576b-4804-8686-9dcfeb777486)
