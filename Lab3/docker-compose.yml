@@ -1,0 +1,23 @@
+services:
+  spark:
+    build: .
+    container_name: spark_app
+    environment:
+      - PYSPARK_PYTHON=python3
+      - PYSPARK_DRIVER_PYTHON=python3
+      - SPARK_HOME=/opt/bitnami/spark
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./logs:/app/logs
+    ports:
+      - "4040:4040"  # Spark
+      - "5000:5000"  # MLflow
+    networks:
+      - spark-network
+    command: >
+      bash -c "mlflow ui --host 0.0.0.0 --port 5000 & python /app/src/main.py & tail -f /dev/null"
+
+networks:
+  spark-network:
+    driver: bridge
