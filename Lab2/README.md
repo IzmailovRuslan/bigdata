@@ -1,8 +1,8 @@
 # Запуск
 1. В зависимости от эксперимента нужно выполнить одну из команд:
    
-- ``docker-compose -f docker-compose.yml up -d``
-- ``docker-compose -f docker-compose-3d.yml up -d``
+- ``docker-compose -f docker-compose.yml up``
+- ``docker-compose -f docker-compose-3d.yml up``
   
 2. В зависимости от эксперимента запустить одну из команд:
    
